@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login-form</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #1d1d1d;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .login-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+            width: 350px;
+        }
+        .carousel-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+        }
+    </style>
+</head>
+
+
+<body>
+        <!--Aqui inicializamos una cabecera con los elementos esenciales de la web e inicio de sesion-->
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+              <a class="navbar-brand">
+                <img src="http://localhost:5000/images/formula-1-seeklogo.png" alt="F1" width="90" height="24" class="d-inline-block align-text-top">
+              </a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">Inicio</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Circuitos</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Equipos</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Calendario</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+
+
+
+    <div class="carousel-container">
+        <div id="f1Carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="f1_1.jpg" class="d-block w-100" alt="F1 Momento 1">
+                </div>
+                <div class="carousel-item">
+                    <img src="f1_2.jpg" class="d-block w-100" alt="F1 Momento 2">
+                </div>
+                <div class="carousel-item">
+                    <img src="f1_3.jpg" class="d-block w-100" alt="F1 Momento 3">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="login-container">
+        <h2 class="text-center">Registrar Nuevo Usuario</h2>
+        <form action="/login" method="POST" action="{{ url_for('login') }}">
+            <div class="mb-3">
+                <label for="Usuario" class="form-label">Usuario</label>
+                <input type="text" class="form-control" id="Usuario" name="Usuario" required>
+            </div>
+            <div class="mb-3">
+                <label for="Contraseña" class="form-label">Contraseña</label>
+                <input type="password" class="form-control" id="Contraseña" name="Contraseña" required>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger flex-fill">Ingresar</button>
+                <a href="{{ url_for('index') }}" class="btn btn-secondary flex-fill text-white">Cancelar</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
