@@ -34,38 +34,25 @@
         }
     </style>
 </head>
-
-
 <body>
-        <!--Aqui inicializamos una cabecera con los elementos esenciales de la web e inicio de sesion-->
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
-              <a class="navbar-brand">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand">
                 <img src="{{ url_for('static', filename='images/formula-1-seeklogo.png') }}" alt="F1" width="90" height="24">
-              </a>
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
-              </button>
-              <div class="collapse navbar-collapse" id="navbarText">
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">Inicio</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Circuitos</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Equipos</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Calendario</a>
-                  </li>
+                    <li class="nav-item"><a class="nav-link active" href="/">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Circuitos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Equipos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Calendario</a></li>
                 </ul>
-              </div>
             </div>
-          </nav>
-
-
+        </div>
+    </nav>
 
     <div class="carousel-container">
         <div id="f1Carousel" class="carousel slide" data-bs-ride="carousel">
@@ -85,19 +72,38 @@
     
     <div class="login-container">
         <h2 class="text-center">Registrar Nuevo Usuario</h2>
-        <form action="/login" method="POST" action="{{ url_for('login') }}">
+        <form action="{{ url_for('registro') }}" method="POST">
             <div class="mb-3">
-                <label for="Usuario" class="form-label">Usuario</label>
-                <input type="text" class="form-control" id="Usuario" name="Usuario" required>
+                <label for="usuario" class="form-label">Usuario</label>
+                <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Usuario" required>
             </div>
             <div class="mb-3">
-                <label for="Contraseña" class="form-label">Contraseña</label>
-                <input type="password" class="form-control" id="Contraseña" name="Contraseña" required>
+                <label for="contraseña" class="form-label">Contraseña</label>
+                <input type="password" class="form-control" id="contraseña" name="contraseña" placeholder="Contraseña" required>
+            </div>
+            <div class="mb-3">
+                <label for="equipo" class="form-label">Seleccionar equipo</label>
+                <select class="form-select" id="equipo" name="equipo" required>
+                    <option value="">Selecciona un equipo</option>
+                    {% for equipo in equipos %}
+                        <option value="{{ equipo }}">{{ equipo }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-danger flex-fill">Registrarse</button>
                 <a href="{{ url_for('index') }}" class="btn btn-secondary flex-fill text-white">Cancelar</a>
             </div>
+            {% if mensaje %}
+                <p class="text-danger text-center">{{ mensaje }}</p>
+            {% endif %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <p class="text-success text-center">{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
         </form>
     </div>
 
