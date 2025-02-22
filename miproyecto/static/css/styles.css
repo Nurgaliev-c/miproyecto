@@ -1,0 +1,16 @@
+.navbar {
+    position: sticky;
+    top: 0;
+    background-color: white;
+}
+
+body {
+    overflow: auto; /* Permite el desplazamiento */
+    height: 100vh; /* Asegura que tenga una altura inicial */
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-y: auto; /* Activa el desplazamiento vertical */
+}

@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
 import bcrypt
 
-app = Flask(__name__, static_folder='images')
+app = Flask(__name__, static_folder='static')
 app.secret_key = 'tu_clave_secreta'
 
 # Función para crear la base de datos si no existe
