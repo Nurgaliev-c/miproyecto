@@ -15,7 +15,7 @@ cursor.execute('''
     )
 ''')
 
-# Lista actualizada de pilotos F1 2025
+# Lista actualizada de pilotos F1 2024
 pilotos = [
     ("Max Verstappen", "Red Bull"),
     ("Sergio Pérez", "Red Bull"),

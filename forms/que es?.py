@@ -1,1 +1,0 @@
-# ubicacion de los formularios Flask-WT si se utilizan

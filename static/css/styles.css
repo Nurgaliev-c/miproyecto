@@ -3,7 +3,7 @@
     top: 0;
     background-color: white;
 }
-
+/* modificacion del navbar para que se mueva conforme al contenido de la web */
 body {
     overflow: auto; /* Permite el desplazamiento */
     height: 100vh; /* Asegura que tenga una altura inicial */
@@ -14,3 +14,10 @@ html, body {
     padding: 0;
     overflow-y: auto; /* Activa el desplazamiento vertical */
 }
+/* Modificar el carrousel para que haga mas lento el cambio del fade entre imagen e imagen */
+.carousel-fade .carousel-item {
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: 1.5s; /* Duración de la transición (puedes ajustarla) */
+    transition-timing-function: ease;
+  }

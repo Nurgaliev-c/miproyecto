@@ -6,7 +6,7 @@ app = Flask(__name__, static_folder='static')
 app.secret_key = 'tu_clave_secreta'
 bcrypt = Bcrypt(app)  # Inicializar bcrypt
 
-# Función para inicializar la base de datos
+#* Función para inicializar la base de datos, se crean las tablas necesarias
 def inicializar_bd():
     conexion = sqlite3.connect("database.db")
     cursor = conexion.cursor()
@@ -23,11 +23,11 @@ def inicializar_bd():
 
 inicializar_bd()
 
-# Función para obtener conexión a la base de datos
+#* Función para obtener conexión a la base de datos 
 def obtener_conexion():
     return sqlite3.connect("database.db", check_same_thread=False)
 
-# Función para verificar credenciales
+#*Función para verificar credenciales
 def verificar_usuario(usuario, contraseña):
     conexion = obtener_conexion()
     cursor = conexion.cursor()
@@ -46,6 +46,11 @@ def index():
     usuario = session.get('usuario')
     return render_template('index.html', usuario=usuario)
 
+@app.route('/calendario')
+def calendario():
+    return render_template('calendario.html')
+
+#* Ruta para iniciar sesión en la aplicación web 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     mensaje = None
@@ -61,31 +66,32 @@ def login():
 
     return render_template('login.html', mensaje=mensaje)
 
+#* Ruta para registrar un nuevo usuario en la base de datos
 @app.route('/registro', methods=['GET', 'POST'])
 def registro():
     conexion = obtener_conexion()
     cursor = conexion.cursor()
     
-    # Obtener los equipos desde la tabla "equipo"
-    cursor.execute("SELECT nombre FROM equipo")  # Asegúrate de que "nombre" es la columna correcta
+    #* Obtener los equipos desde la tabla "equipo"
+    cursor.execute("SELECT nombre FROM equipo")  #* Asegúrarse de que "nombre" es la columna correcta
     equipos = [fila[0] for fila in cursor.fetchall()]
     
     if request.method == 'POST':
         usuario = request.form['usuario']
         contraseña = request.form['contraseña']
-        equipo = request.form['equipo']  # Captura el equipo seleccionado
+        equipo = request.form['equipo']  #* Captura el equipo seleccionado
         
-        # Verificar si el usuario ya existe
+        #* Verificar si el usuario ya existe
         cursor.execute("SELECT COUNT(*) FROM usuarios WHERE nombre_usuario=?", (usuario,))
         resultado = cursor.fetchone()
         
         if resultado[0] > 0:
             return render_template('registro.html', mensaje="Error: El usuario ya existe.", equipos=equipos)
         
-        # Hashear la contraseña antes de guardarla en la BD
+        #* Hashear la contraseña antes de guardarla en la BD
         contraseña_hash = bcrypt.generate_password_hash(contraseña).decode('utf-8')
 
-        # Registrar usuario con la contraseña encriptada
+        #* Registrar usuario con la contraseña encriptada
         cursor.execute("INSERT INTO usuarios (nombre_usuario, contraseña, equipo) VALUES (?, ?, ?)", 
                        (usuario, contraseña_hash, equipo))
         conexion.commit()

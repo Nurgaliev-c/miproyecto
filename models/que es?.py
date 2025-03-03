@@ -1,1 +1,0 @@
-# Archivos py con la definicion de las tablas de la base de datos
