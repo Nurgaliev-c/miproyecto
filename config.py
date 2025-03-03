@@ -1,0 +1,1 @@
+# Script con la configuración de la aplicacion, si se quiere separar
