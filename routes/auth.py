@@ -1,28 +1,11 @@
+# routes/auth.py
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-import sqlite3
-from flask_bcrypt import Bcrypt  # Se usa flask_bcrypt en lugar de bcrypt
+from models.conexiondb import inicializar_bd, obtener_conexion, verificar_usuario, crear_usuario
 
 auth = Blueprint('auth', __name__)
 
-
-#* Función para obtener conexión a la base de datos 
-def obtener_conexion():
-    return sqlite3.connect("database.db", check_same_thread=False)
-
-#*Función para verificar credenciales
-def verificar_usuario(usuario, contraseña):
-    conexion = obtener_conexion()
-    cursor = conexion.cursor()
-    cursor.execute("SELECT contraseña FROM usuarios WHERE nombre_usuario = ?", (usuario,))
-    usuario_encontrado = cursor.fetchone()
-    conexion.close()
-
-    if usuario_encontrado:
-        contraseña_guardada = usuario_encontrado[0].encode('utf-8')
-        if bcrypt.check_password_hash(contraseña_guardada, contraseña):  # Comparación segura
-            return True
-    return False
-
+# Llamamos a inicializar_bd() solo una vez (o podrías hacerlo en app.py)
+inicializar_bd()
 
 @auth.route('/')
 def index():
@@ -33,7 +16,6 @@ def index():
 def calendario():
     return render_template('calendario.html')
 
-
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     mensaje = None
@@ -43,29 +25,44 @@ def login():
 
         if verificar_usuario(usuario, contraseña):
             session['usuario'] = usuario
-            return redirect(url_for('index'))
+            return redirect(url_for('auth.index'))
         else:
             mensaje = "Usuario o contraseña incorrectos"
 
     return render_template('login.html', mensaje=mensaje)
 
-
-
-#* Ruta para registrar un nuevo usuario en la base de datos
 @auth.route('/registro', methods=['GET', 'POST'])
 def registro():
     conexion = obtener_conexion()
     cursor = conexion.cursor()
 
+    # Si tienes una tabla 'equipo' con columna 'nombre'
+    cursor.execute("SELECT nombre FROM equipo")
+    equipos = [fila[0] for fila in cursor.fetchall()]
+    conexion.close()
 
+    if request.method == 'POST':
+        usuario = request.form['usuario']
+        contraseña = request.form['contraseña']
+        equipo = request.form['equipo']
 
+        # Verificar si el usuario ya existe
+        conexion = obtener_conexion()
+        cursor = conexion.cursor()
+        cursor.execute("SELECT COUNT(*) FROM usuarios WHERE nombre_usuario=?", (usuario,))
+        existe = cursor.fetchone()
+        if existe[0] > 0:
+            conexion.close()
+            return render_template('registro.html', mensaje="Error: El usuario ya existe.", equipos=equipos)
 
+        # Crear usuario con contraseña encriptada
+        crear_usuario(usuario, contraseña, equipo)
+        flash("Usuario registrado con éxito", "success")
+        return redirect(url_for('auth.login'))
 
-
-
-
+    return render_template('registro.html', equipos=equipos)
 
 @auth.route('/logout')
 def logout():
     session.pop('usuario', None)
-    return redirect(url_for('index'))
+    return redirect(url_for('auth.index'))

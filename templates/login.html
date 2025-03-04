@@ -59,7 +59,7 @@
                     <a class="nav-link" href="#">Equipos</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">Calendario</a>
+                    <a class="nav-link" href="{{ url_for('auth.calendario') }}">Calendario</a>
                   </li>
                 </ul>
               </div>
@@ -107,7 +107,7 @@
     
     <div class="login-container">
         <h2 class="text-center">Iniciar Sesión</h2>
-        <form action="{{ url_for('login') }}" method="POST">
+        <form action="{{ url_for('auth.login') }}" method="POST">
             <div class="mb-3">
                 <label for="usuario" class="form-label">Usuario</label>
                 <input type="text" class="form-control" id="usuario" name="usuario" required>
@@ -118,7 +118,7 @@
             </div>
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-danger flex-fill">Ingresar</button>
-                <a href="{{ url_for('index') }}" class="btn btn-secondary flex-fill text-white">Cancelar</a>
+                <a href="{{ url_for('auth.index') }}" class="btn btn-secondary flex-fill text-white">Cancelar</a>
             </div>
              <!-- Mostrar mensaje de error si existe -->
              {% if mensaje %}

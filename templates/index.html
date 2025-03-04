@@ -34,16 +34,16 @@
                       <a class="nav-link" href="#">Equipos</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link" href="{{ url_for('calendario') }}">Calendario</a>
+                      <a class="nav-link" href="{{ url_for('auth.calendario') }}">Calendario</a>
                   </li>
               </ul>
               <!-- Aquí agregamos la lógica para mostrar el usuario autenticado o el botón de inicio de sesión -->
               <span class="navbar-text">
                 {% if session['usuario'] %}
                     <i class="bi bi-person-circle"></i> Usuario: {{ session['usuario'] }}
-                    <a href="{{ url_for('logout') }}" class="btn btn-danger text-white ms-2">Cerrar sesión</a>
+                    <a href="{{ url_for('auth.logout') }}" class="btn btn-danger text-white ms-2">Cerrar sesión</a>
                 {% else %}
-                    <a href="{{ url_for('login') }}" class="btn btn-danger text-white">
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-danger text-white">
                         <i class="bi bi-person-circle"></i> Iniciar sesión
                     </a>
                 {% endif %}

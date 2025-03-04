@@ -2,111 +2,296 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  <title>Calendar</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <title>Calendario F1 Manual</title>
 
-  <!-- Estilos de FullCalendar -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/main.min.css">
-  <!-- Script de FullCalendar -->
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/main.min.js"></script>
-  <!-- Opcional: estilo propio para “grisar” días pasados (si quieres un tono más notorio) -->
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" 
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
+        crossorigin="anonymous">
+
+  <!-- Bootstrap JS Bundle (incluye Popper + Bootstrap JS) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
+          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
+          crossorigin="anonymous"></script>
+
+  <!-- Bootstrap Icons (opcional, por si usas íconos) -->
+  <link rel="stylesheet" 
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
   <style>
-    .fc-day-past {
-      background-color: #f0f0f0 !important; /* un gris más marcado */
-      pointer-events: none; /* desactiva clic */
+    /* Fondo negro general */
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000; /* Negro */
+      font-family: Arial, sans-serif;
+      color: #fff; /* Texto blanco */
+    }
+
+    /* Ajuste para que el contenido del calendario no quede debajo del navbar */
+    /* (Bootstrap navbar tiene altura variable, puedes ajustarlo si deseas más espacio) */
+    .contenido {
+      margin-top: 80px;
+    }
+
+    /* Título del calendario */
+    h1 {
+      text-align: center;
+      color: #c30000; /* Rojo estilo F1 */
+      margin: 20px 0 10px;
+    }
+
+    /* Contenedor principal del calendario */
+    .calendar-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #1a1a1a;
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+
+    .controls button {
+      background-color: #c30000;
+      border: none;
+      color: #fff;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 4px;
+    }
+    .controls button:hover {
+      background-color: #910000; /* un poco más oscuro */
+    }
+
+    .month-year {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    thead {
+      background-color: #c30000;
+    }
+    thead th {
+      padding: 8px 0;
+      text-transform: uppercase;
+      color: #fff;
+    }
+    tbody td {
+      width: 14.28%; /* 100% / 7 días */
+      height: 80px;
+      text-align: center;
+      vertical-align: middle;
+      border: 1px solid #444;
+      color: #fff;
+    }
+    tbody td.empty {
+      background-color: #2a2a2a;
+    }
+    tbody td.day {
+      background-color: #1a1a1a;
+    }
+    tbody td.day:hover {
+      background-color: #2a2a2a;
+      cursor: pointer;
+    }
+
+    /* Día actual en un color distinto */
+    td.today {
+      background-color: #c30000;
+      color: #fff;
     }
   </style>
 </head>
 <body>
 
-    <!--Aqui inicializamos una cabecera con los elementos esenciales de la web e inicio de sesion-->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand"> 
-              <img src="{{ url_for('static', filename='images/formula-1-seeklogo.png') }}" alt="F1" width="90" height="24">
-          </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarText">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Circuitos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Equipos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('calendario') }}">Calendario</a>
-                    </li>
-                </ul>
-                <!-- Aquí agregamos la lógica para mostrar el usuario autenticado o el botón de inicio de sesión -->
-                <span class="navbar-text">
-                    {% if session['usuario'] %}
-                        <i class="bi bi-person-circle"></i> Usuario: {{ session['usuario'] }}
-                        <a href="{{ url_for('logout') }}" class="btn btn-danger text-white ms-2">Cerrar sesión</a>
-                    {% else %}
-                        <a href="{{ url_for('login') }}" class="btn btn-danger text-white">
-                            <i class="bi bi-person-circle"></i> Iniciar sesión
-                        </a>
-                    {% endif %}
-            </div>
+  <!-- NAVBAR (Basado en tu código) -->
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand"> 
+        <!-- Ajusta esta imagen según tu ruta en Flask o local -->
+        <img src="{{ url_for('static', filename='images/formula-1-seeklogo.png') }}" 
+             alt="F1" width="90" height="24">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+              data-bs-target="#navbarText" aria-controls="navbarText" 
+              aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-        </div>
-  <div id="calendar"></div>
+      <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <!-- Ajusta href si estás en Flask -->
+            <a class="nav-link active" aria-current="page" href="{{ url_for('auth.index') }}">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Circuitos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Equipos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('auth.calendario') }}">Calendario</a>
+          </li>
+        </ul>
+        <!-- Mostrar usuario o botón de inicio de sesión (ejemplo Jinja) -->
+        <span class="navbar-text">
+          {% if session['usuario'] %}
+            <i class="bi bi-person-circle"></i> Usuario: {{ session['usuario'] }}
+            <a href="{{ url_for('auth.logout') }}" class="btn btn-danger text-white ms-2">Cerrar sesión</a>
+          {% else %}
+            <a href="{{ url_for('auth.login') }}" class="btn btn-danger text-white">
+              <i class="bi bi-person-circle"></i> Iniciar sesión
+            </a>
+          {% endif %}
+        </span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenido con margen para que no quede tapado por el navbar -->
+  <div class="contenido">
+    <h1>Calendario Oficial F1</h1>
+    <div class="calendar-container">
+      <div class="controls">
+        <button id="prevBtn">Prev</button>
+        <div class="month-year" id="monthYear"></div>
+        <button id="nextBtn">Next</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Lun</th>
+            <th>Mar</th>
+            <th>Mié</th>
+            <th>Jue</th>
+            <th>Vie</th>
+            <th>Sáb</th>
+            <th>Dom</th>
+          </tr>
+        </thead>
+        <tbody id="calendarBody">
+          <!-- Aquí se generarán dinámicamente las filas y celdas de cada día -->
+        </tbody>
+      </table>
+    </div>
+  </div>
 
   <script>
+    // Variables globales para controlar el mes y año que se muestra
+    let currentDate = new Date();
+    let currentMonth = currentDate.getMonth(); // 0 = Enero, 11 = Diciembre
+    let currentYear = currentDate.getFullYear();
+
+    // Referencias a elementos del DOM
+    const monthYearEl = document.getElementById('monthYear');
+    const calendarBodyEl = document.getElementById('calendarBody');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    // Al cargar la página, dibujamos el calendario
     document.addEventListener('DOMContentLoaded', function() {
-      var calendarEl = document.getElementById('calendar');
-
-      // Obtenemos la fecha de hoy en formato YYYY-MM-DD
-      var today = new Date().toISOString().split('T')[0];
-
-      // Inicializamos FullCalendar
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        // Restringe la navegación: no deja ir a fechas anteriores a "today"
-        validRange: {
-          start: today
-        },
-        // Si deseas que no puedan ni siquiera “ver” meses pasados
-        // puedes usar `initialDate: today` y no permitir “prev”:
-        headerToolbar: {
-          left: 'title',
-          center: '',
-          right: 'today next' // no ponemos "prev" para que no retrocedan
-        },
-
-        // Opcional: si quieres que se puedan crear eventos con un clic
-        dateClick: function(info) {
-          // Aquí podrías abrir un modal o formulario para agregar tarea
-          alert('Has hecho clic en ' + info.dateStr);
-        },
-
-        // Ejemplo de eventos (tareas) preexistentes
-        events: [
-          {
-            title: 'Reunión con ingenieros',
-            start: '2025-03-10',
-            allDay: true
-          },
-          {
-            title: 'Presentación de Proyecto',
-            start: '2025-03-15T10:30:00',
-            end: '2025-03-15T12:30:00'
-          }
-        ]
-      });
-
-      // Renderiza el calendario en pantalla
-      calendar.render();
+      renderCalendar(currentYear, currentMonth);
     });
+
+    // Botón Prev: retrocede un mes
+    prevBtn.addEventListener('click', () => {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      renderCalendar(currentYear, currentMonth);
+    });
+
+    // Botón Next: avanza un mes
+    nextBtn.addEventListener('click', () => {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      renderCalendar(currentYear, currentMonth);
+    });
+
+    // Función principal para dibujar el calendario
+    function renderCalendar(year, month) {
+      // Limpiamos el <tbody> anterior
+      calendarBodyEl.innerHTML = '';
+
+      // Fecha temporal al primer día del mes
+      let firstDayOfMonth = new Date(year, month, 1);
+      // Día de la semana (0=Dom, 1=Lun, ...). Ajustamos para que lunes=0
+      let startDay = (firstDayOfMonth.getDay() + 6) % 7; 
+        // Con +6 %7 convertimos: Dom=0 =>6, Lun=1=>0, etc.
+
+      // Número de días en este mes
+      let daysInMonth = new Date(year, month+1, 0).getDate(); 
+
+      // Actualizamos el título de mes y año
+      let monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+      monthYearEl.textContent = `${monthNames[month]} ${year}`;
+
+      // Construimos las celdas del calendario
+      let dayCell = 1;
+      for (let row = 0; row < 6; row++) {
+        let rowEl = document.createElement('tr');
+
+        for (let col = 0; col < 7; col++) {
+          let cellEl = document.createElement('td');
+
+          if (row === 0 && col < startDay) {
+            // Celdas vacías antes de que empiece el mes
+            cellEl.classList.add('empty');
+            cellEl.innerHTML = '';
+          } else if (dayCell > daysInMonth) {
+            // Celdas vacías después de que acabe el mes
+            cellEl.classList.add('empty');
+            cellEl.innerHTML = '';
+          } else {
+            // Día válido del mes
+            cellEl.classList.add('day');
+            cellEl.innerHTML = dayCell;
+
+            // Marcar si es "hoy"
+            let isToday = isCurrentDay(year, month, dayCell);
+            if (isToday) {
+              cellEl.classList.add('today');
+            }
+
+            dayCell++;
+          }
+          rowEl.appendChild(cellEl);
+        }
+
+        calendarBodyEl.appendChild(rowEl);
+
+        if (dayCell > daysInMonth) break;
+      }
+    }
+
+    // Función para comprobar si un día dado (año, mes, día) es hoy
+    function isCurrentDay(year, month, day) {
+      let today = new Date();
+      return (
+        day === today.getDate() &&
+        month === today.getMonth() &&
+        year === today.getFullYear()
+      );
+    }
   </script>
 
 </body>

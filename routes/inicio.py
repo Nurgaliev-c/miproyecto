@@ -1,5 +1,10 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-import sqlite3
-from flask_bcrypt import Bcrypt  # Se usa flask_bcrypt en lugar de bcrypt
+# routes/inicio.py
+from flask import Blueprint, render_template, session
 
-auth = Blueprint('auth', __name__)
+inicio_bp = Blueprint('inicio_bp', __name__)
+
+@inicio_bp.route('/')
+def index():
+    usuario = session.get('usuario')
+    # Muestra la página de inicio
+    return render_template('index.html', usuario=usuario)
