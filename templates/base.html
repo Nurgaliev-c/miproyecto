@@ -10,45 +10,48 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 <body>
-    <div class="container">
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
-              <a class="navbar-brand">Navbar w/ text</a>
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-              <div class="collapse navbar-collapse" id="navbarText">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{ url_for('auth.login') }}">Login</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('auth.registro') }}">Registro</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('auth.calendario') }}">Calendario</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('tareas.update') }}">Actualizar</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('tareas.delete') }}">Eliminar</a>
-                  </li>
-                </ul>
-                <!-- Aquí agregamos la lógica para mostrar el usuario autenticado o el botón de inicio de sesión -->
-                <span class="navbar-text">
-                  {% if session['usuario'] %}
-                      <i class="bi bi-person-circle"></i> Usuario: {{ session['usuario'] }}
-                      <a href="{{ url_for('auth.logout') }}" class="btn btn-danger text-white ms-2">Cerrar sesión</a>
-                  {% else %}
-                      <a href="{{ url_for('auth.login') }}" class="btn btn-danger text-white">
-                          <i class="bi bi-person-circle"></i> Iniciar sesión
-                      </a>
-                  {% endif %}
-                </span>
-              </div>
-            </div>
-        </nav>
+    <!-- NAVBAR a ancho completo -->
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand">
+      <img src="{{ url_for('static', filename='images/formula-1-seeklogo.png') }}"
+           alt="F1" width="90" height="24">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarText" aria-controls="navbarText"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{{ url_for('auth.index') }}">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Circuitos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Equipos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('auth.calendario') }}">Calendario</a>
+        </li>
+      </ul>
+      <span class="navbar-text">
+        {% if session['usuario'] %}
+          <i class="bi bi-person-circle"></i> Usuario: {{ session['usuario'] }}
+          <a href="{{ url_for('auth.logout') }}" class="btn btn-danger text-white ms-2">Cerrar sesión</a>
+        {% else %}
+          <a href="{{ url_for('auth.login') }}" class="btn btn-danger text-white">
+            <i class="bi bi-person-circle"></i> Iniciar sesión
+          </a>
+        {% endif %}
+      </span>
+    </div>
+  </div>
+</nav>
+
 
         <!-- Bloque donde se inyectará el contenido de cada plantilla hija -->
         {% block content %}
